@@ -1,0 +1,40 @@
+name: Cleanup VPS pitch hosting (one-shot)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Remove pitch hosting from VPS
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} <<'EOF'
+            set -e
+            echo "=== Remove nginx server-block ==="
+            rm -fv /etc/nginx/sites-enabled/pitch-vkd.conf 2>/dev/null || true
+            rm -fv /etc/nginx/sites-available/pitch-vkd.conf 2>/dev/null || true
+            rm -fv /etc/nginx/conf.d/pitch-vkd.conf 2>/dev/null || true
+
+            echo "=== Remove webroot ==="
+            rm -rfv /var/www/pitch-vkd 2>/dev/null || true
+
+            echo "=== Remove Let's Encrypt cert if exists ==="
+            certbot delete --cert-name pitch.vezdekakdoma.ru -n 2>/dev/null || echo "(no cert)"
+
+            echo "=== Test nginx config ==="
+            nginx -t
+            echo "=== Reload nginx ==="
+            systemctl reload nginx
+
+            echo "=== DONE ==="
+          EOF

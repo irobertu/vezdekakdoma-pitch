@@ -1,4 +1,4 @@
-name: Deploy pitch.vezdekakdoma.ru
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -9,19 +9,21 @@ on:
       - 'screens/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Inject Yandex.Metrika (если задан YM_COUNTER_ID)
         env:
@@ -41,21 +43,34 @@ jobs:
               f.write(html)
           EOF
 
-      - name: Prepare deploy directory
+      - name: Prepare _site directory
         run: |
-          mkdir -p _deploy
-          cp pitch_v2.html _deploy/index.html
-          cp -r assets _deploy/
+          mkdir -p _site
+          cp pitch_v2.html _site/index.html
+          cp -r assets _site/
+          # 404 fallback
+          cp pitch_v2.html _site/404.html
+          touch _site/.nojekyll
 
-      - name: Deploy via rsync
-        run: |
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" \
-            _deploy/ \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/pitch-vkd/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 
       - name: Smoke test
         run: |
-          sleep 3
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L https://pitch.vezdekakdoma.ru/ || echo "fail")
-          echo "Pitch homepage HTTP: $STATUS"
+          sleep 5
+          URL="${{ steps.deployment.outputs.page_url }}"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "fail")
+          echo "Pitch homepage HTTP: $STATUS at $URL"
+          [ "$STATUS" = "200" ]
