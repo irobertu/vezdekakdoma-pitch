@@ -2161,19 +2161,25 @@
     .rm-lab { font-size: 14px !important; font-weight: 600 !important; }
     .rm-arr { font-size: 12.5px !important; font-weight: 600 !important; color: var(--t1) !important; }
 
-    /* PHONE-NAV (s4 bottom bar) — иконки крупнее и равномерно */
+    /* PHONE-NAV (s4 bottom bar) — внутри телефона, иконки крупнее, равномерно */
+    .phone-mock { overflow: hidden !important; }
+    .phone-screen { overflow: hidden !important; }
     .phone-nav {
       display: grid !important;
       grid-template-columns: repeat(5, 1fr) !important;
       gap: 0 !important;
-      padding: 6px 4px !important;
+      padding: 8px 4px 6px !important;
+      margin: auto 0 0 0 !important;
+      width: 100% !important;
+      border-radius: 12px 12px 0 0 !important;
+      box-sizing: border-box !important;
     }
     .phone-nav__i {
-      font-size: 18px !important;
-      gap: 3px !important;
+      font-size: 16px !important;
+      gap: 2px !important;
       width: 100% !important;
     }
-    .phone-nav__i small { font-size: 8px !important; font-weight: 600 !important; }
+    .phone-nav__i small { font-size: 7.5px !important; font-weight: 600 !important; }
   }
 
   /* ═══ EXTRA-SMALL PHONES (≤ 380px) ═══ */
