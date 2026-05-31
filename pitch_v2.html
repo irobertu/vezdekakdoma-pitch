@@ -517,38 +517,103 @@
     margin-top: 12px;
     align-items: center;
   }
+  /* ═══ iPhone 17-style mock — корпус: единый рендер без двойного ring shadow ═══ */
   .phone-mock {
     width: 100%;
-    aspect-ratio: 9 / 18;
-    background: linear-gradient(160deg, #1A4858 0%, var(--navy) 50%, #061520 100%);
-    border-radius: 44px;
-    padding: 16px 14px;
+    aspect-ratio: 9 / 19.5;
+    background:
+      linear-gradient(140deg, #3C4A5A 0%, #1F2A38 26%, #0E1822 62%, #050B12 100%);
+    border-radius: 52px;
+    padding: 12px;
     position: relative;
     box-shadow:
-      0 0 0 8px #0A1A24,
-      0 0 0 9px #213040,
-      0 30px 60px rgba(0,0,0,.18),
-      0 60px 100px rgba(98,164,172,.15);
+      0 1px 0 rgba(255,255,255,.08) inset,
+      0 0 0 1px #0A1218 inset,
+      0 28px 56px rgba(0,0,0,.28),
+      0 56px 96px rgba(98,164,172,.14);
   }
-  .phone-mock::before {
+  /* Боковой металлический блик корпуса */
+  .phone-mock::after {
     content: '';
     position: absolute;
-    top: 26px; left: 50%;
-    transform: translateX(-50%);
-    width: 104px; height: 30px;
-    background: #050B12;
-    border-radius: 999px;
-    z-index: 3;
-    box-shadow: inset 0 1px 2px rgba(255,255,255,.04);
+    inset: 0;
+    border-radius: 52px;
+    background: linear-gradient(110deg,
+      rgba(255,255,255,.10) 0%,
+      transparent 14%,
+      transparent 86%,
+      rgba(255,255,255,.06) 100%);
+    pointer-events: none;
+    z-index: 0;
   }
   .phone-screen {
     background: var(--mint);
-    border-radius: 32px;
+    border-radius: 40px;
     height: 100%;
-    padding: 72px 18px 18px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+  /* Тёмная status-bar с notch и системными иконками */
+  .phone-status {
+    background: #050B12;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 40px 40px 0 0;
+  }
+  .phone-status__time { z-index: 1; }
+  .phone-status__icons {
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+  }
+  .phone-status__icons::after {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 10px;
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 3px;
+    margin-left: 2px;
+    background:
+      linear-gradient(90deg, #fff 0%, #fff 88%, transparent 88%);
+    background-size: 100% 100%;
+    background-clip: padding-box;
+    position: relative;
+  }
+  .phone-status::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 102px; height: 26px;
+    background: #000;
+    border-radius: 999px;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,.06),
+      0 0 0 2px rgba(0,0,0,.6);
+    z-index: 2;
+  }
+  /* Содержимое app — отдельный wrapper с правильным padding'ом */
+  .phone-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    padding: 14px 14px 0;
     overflow: hidden;
   }
   .phone-search {
@@ -696,15 +761,14 @@
   .phone-city--wide .phone-city__plate { font-size: 8px; padding: 3px 7px; }
 
   .phone-nav {
-    margin-top: auto;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 2px;
     background: var(--white);
-    padding: 8px 4px 4px;
-    border-radius: 14px 14px 0 0;
-    box-shadow: 0 -4px 14px rgba(10,34,48,.08);
-    margin: auto -8px -10px;
+    padding: 9px 4px 12px;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -6px 16px rgba(10,34,48,.10);
+    margin: auto -14px 0;
   }
   .phone-nav__i {
     text-align: center;
@@ -1492,8 +1556,18 @@
     font-weight: 600;
     line-height: 1.4;
   }
+  .rm-desc {
+    margin-top: 8px;
+    font-size: 11px;
+    color: rgba(237,247,247,.55);
+    line-height: 1.45;
+    font-weight: 400;
+    max-width: 180px;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .rm-arr {
-    margin-top: 6px;
+    margin-top: 10px;
     font-size: 12px;
     color: rgba(98,164,172,.85);
     font-weight: 600;
@@ -1854,33 +1928,31 @@
     .pain { padding: 16px; font-size: 13px; }
     .pain b { font-size: 14px; }
 
-    /* ─── 4 · SOLUTION ─── */
+    /* ─── 4 · SOLUTION — мобильная версия iPhone-мока ─── */
     .solution { grid-template-columns: 1fr; gap: 24px; }
-    /* iPhone 17-style: continuous corners 56px, dynamic island, без notch */
     .phone-mock {
-      max-width: 340px !important;
+      max-width: 320px !important;
       margin: 0 auto !important;
-      aspect-ratio: 9 / 19.5 !important;
-      border-radius: 56px !important;
       padding: 10px !important;
-      box-shadow:
-        0 0 0 4px #0A1A24,
-        0 0 0 5px #1F2A38,
-        0 24px 48px rgba(0,0,0,.25),
-        0 48px 84px rgba(98,164,172,.18) !important;
+      border-radius: 48px !important;
     }
-    .phone-mock::before {
-      width: 96px !important;
-      height: 28px !important;
-      border-radius: 999px !important;
-      top: 18px !important;
-      background: #000 !important;
-    }
+    .phone-mock::after { border-radius: 48px !important; }
     .phone-screen {
-      padding: 64px 14px 0 !important;
-      gap: 11px !important;
-      border-radius: 46px !important;
-      overflow: hidden !important;
+      border-radius: 38px !important;
+    }
+    .phone-status {
+      height: 34px !important;
+      padding: 0 18px !important;
+      font-size: 10px !important;
+      border-radius: 38px 38px 0 0 !important;
+    }
+    .phone-status::before {
+      width: 92px !important;
+      height: 22px !important;
+    }
+    .phone-content {
+      padding: 12px 12px 0 !important;
+      gap: 10px !important;
     }
     .phone-brand { padding: 0 0 2px !important; }
     .phone-brand img { height: 20px !important; }
@@ -2050,8 +2122,16 @@
       flex-shrink: 0;
       margin-top: 0 !important;
     }
-    .rm-lab { font-size: 13px; text-align: left; flex: 1; }
-    .rm-arr { font-size: 12px; text-align: right; white-space: nowrap; }
+    .rm-lab { font-size: 13px; text-align: left; }
+    .rm-desc {
+      font-size: 11.5px;
+      text-align: left;
+      max-width: 100%;
+      margin: 4px 0 0 0;
+      color: rgba(237,247,247,.6);
+      line-height: 1.4;
+    }
+    .rm-arr { font-size: 12px; text-align: left; margin-top: 8px; }
     .rm-footer { grid-template-columns: 1fr !important; gap: 12px; }
 
     /* ─── 11 · TEAM ─── */
@@ -2236,8 +2316,21 @@
       overflow-x: auto !important;
       -webkit-overflow-scrolling: touch;
     }
-    table.t { min-width: 480px; }
-    .ask-table { min-width: 360px; }
+    table.t { min-width: 560px; }
+    .ask-table { min-width: 560px; }
+    .bm-mix table.t th { white-space: nowrap; padding-left: 8px; padding-right: 8px; }
+    .bm-mix table.t td { padding-left: 8px; padding-right: 8px; }
+    .bm-mix table.t td:nth-child(1) { min-width: 180px; }
+    .bm-mix table.t td:nth-child(4),
+    .bm-mix table.t th:nth-child(4) { min-width: 200px; white-space: normal; }
+    .bm-mix .col-h::after {
+      content: " · листайте →";
+      font-size: 10px;
+      color: rgba(98,164,172,.55);
+      letter-spacing: .5px;
+      text-transform: none;
+      font-weight: 400;
+    }
 
     /* COVER — иллюстрация ВКЛЮЧАЯ globe-blob скрыта на мобильной */
     .cover__illust, .cover__globe { display: none !important; }
@@ -2279,22 +2372,20 @@
     .chart-axis { font-size: 10px !important; }
 
     /* PHONE-NAV (s4 bottom bar) — внутри телефона, иконки крупнее, равномерно */
-    .phone-mock { overflow: hidden !important; }
+    .phone-mock { overflow: visible !important; }
     .phone-screen { overflow: hidden !important; }
     .phone-nav {
       display: grid !important;
       grid-template-columns: repeat(5, 1fr) !important;
       gap: 0 !important;
-      padding: 8px 4px 6px !important;
-      margin: auto 0 0 0 !important;
-      width: 100% !important;
-      border-radius: 12px 12px 0 0 !important;
+      padding: 8px 4px 10px !important;
+      margin: auto -12px 0 !important;
+      border-radius: 14px 14px 0 0 !important;
       box-sizing: border-box !important;
     }
     .phone-nav__i {
-      font-size: 16px !important;
+      font-size: 15px !important;
       gap: 2px !important;
-      width: 100% !important;
     }
     .phone-nav__i small { font-size: 7.5px !important; font-weight: 600 !important; }
   }
@@ -2359,7 +2450,7 @@
   </div>
   <div class="cover__foot">
     <div class="cover__contact">
-      <b>Роберт Усманов</b> · Руководитель проекта<br/>
+      <b>Роберт Усманов</b> · Генеральный директор<br/>
       r.usmanov@zbsk.ru · +7 (987) 210-32-82 · vezdekakdoma.ru
     </div>
     <div class="cover__ask">Раунд: 50 млн ₽ → ARR 130 млн</div>
@@ -2449,6 +2540,11 @@
     <div>
       <div class="phone-mock">
         <div class="phone-screen">
+          <div class="phone-status">
+            <span class="phone-status__time">9:41</span>
+            <span class="phone-status__icons">●●● 5G</span>
+          </div>
+          <div class="phone-content">
           <div class="phone-brand">
             <img src="assets/logo/logo-light.png" alt="">
           </div>
@@ -2521,6 +2617,7 @@
             <div class="phone-nav__i">◯<small>Чат</small></div>
             <div class="phone-nav__i">◔<small>Профиль</small></div>
           </div>
+          </div><!-- /.phone-content -->
         </div>
       </div>
       <div class="store-row">
@@ -2939,14 +3036,14 @@
   <div class="eyebrow">Путь к 300 млн ₽ выручки</div>
   <h2 class="title">Каждый milestone — это <em>ARR-цель</em></h2>
   <div class="roadmap">
-    <div class="rm-pt rm-pt--done"><div class="rm-dot">Окт<br/>2024</div><div class="rm-lab">Запуск B2B</div><div class="rm-arr">старт · 0 ARR</div></div>
-    <div class="rm-pt rm-pt--done"><div class="rm-dot">Мар<br/>2026</div><div class="rm-lab">22 платящих<br/>4,95М GMV</div><div class="rm-arr">ARR ~3,5 млн</div></div>
-    <div class="rm-pt"><div class="rm-dot">Q2<br/>2026</div><div class="rm-lab">Авиа / ж.д.<br/>+ Аукцион</div><div class="rm-arr">ARR 35 млн</div></div>
-    <div class="rm-pt"><div class="rm-dot">Сен<br/>2026</div><div class="rm-lab">Номерной фонд<br/>(отели)</div><div class="rm-arr">ARR 75 млн</div></div>
-    <div class="rm-pt"><div class="rm-dot">Q1<br/>2027</div><div class="rm-lab">Корп. подписки<br/>1С / SAP</div><div class="rm-arr">ARR 130 млн</div></div>
-    <div class="rm-pt"><div class="rm-dot">Q3<br/>2027</div><div class="rm-lab">Marketplace<br/>утвари (Китай)</div><div class="rm-arr">ARR 170 млн</div></div>
-    <div class="rm-pt"><div class="rm-dot">Q4<br/>2027</div><div class="rm-lab">Mobile-app<br/>50 городов</div><div class="rm-arr">ARR 220 млн</div></div>
-    <div class="rm-pt rm-pt--target"><div class="rm-dot">2028</div><div class="rm-lab" style="color: var(--t1); font-size: 14px;">Триггер Series A</div><div class="rm-arr">ARR 300 млн ₽</div></div>
+    <div class="rm-pt rm-pt--done"><div class="rm-dot">Окт<br/>2024</div><div class="rm-lab">Запуск B2B</div><div class="rm-desc">Платформа в Казани, первые 50 объектов, первые ФПГ-договоры</div><div class="rm-arr">старт · 0 ARR</div></div>
+    <div class="rm-pt rm-pt--done"><div class="rm-dot">Мар<br/>2026</div><div class="rm-lab">22 платящих<br/>4,95М GMV</div><div class="rm-desc">MoM 22% · CAC 0 ₽ · M3 retention 78% · LOI на ~28 млн ₽ GMV</div><div class="rm-arr">ARR ~3,5 млн</div></div>
+    <div class="rm-pt"><div class="rm-dot">Q2<br/>2026</div><div class="rm-lab">Авиа / ж.д.<br/>+ Аукцион</div><div class="rm-desc">Партнёрки с агрегаторами, ancillary 3–7%. Аукцион среди собственников = лучшая цена клиенту</div><div class="rm-arr">ARR 35 млн</div></div>
+    <div class="rm-pt"><div class="rm-dot">Сен<br/>2026</div><div class="rm-lab">Номерной фонд<br/>(отели)</div><div class="rm-desc">Прямые контракты с региональными сетями, ancillary 2–15%, новые типы размещения</div><div class="rm-arr">ARR 75 млн</div></div>
+    <div class="rm-pt"><div class="rm-dot">Q1<br/>2027</div><div class="rm-lab">Корп. подписки<br/>1С / SAP</div><div class="rm-desc">Enterprise-пакет 50–150К ₽/мес, интеграция в учётные системы корпораций</div><div class="rm-arr">ARR 130 млн</div></div>
+    <div class="rm-pt"><div class="rm-dot">Q3<br/>2027</div><div class="rm-lab">Marketplace<br/>утвари (Китай)</div><div class="rm-desc">Брендированный текстиль (матрасы / халаты / полотенца) собственникам напрямую с фабрик. Take-rate 12–18%</div><div class="rm-arr">ARR 170 млн</div></div>
+    <div class="rm-pt"><div class="rm-dot">Q4<br/>2027</div><div class="rm-lab">Mobile-app<br/>50 городов</div><div class="rm-desc">Геоэкспансия + iOS/Android для travel-менеджеров и сотрудников в командировках</div><div class="rm-arr">ARR 220 млн</div></div>
+    <div class="rm-pt rm-pt--target"><div class="rm-dot">2028</div><div class="rm-lab" style="color: var(--t1); font-size: 14px;">Триггер Series A</div><div class="rm-desc" style="color: rgba(255,212,120,.7);">6 потоков выручки, GMV 2 млрд ₽, EBITDA-позитив, готовность к раунду B</div><div class="rm-arr">ARR 300 млн ₽</div></div>
   </div>
   <div class="rm-footer">
     <div class="bm-tag bm-tag--live" style="font-size: 13.5px;">
@@ -3050,7 +3147,7 @@
   <img src="assets/logo/logo-dark1.png" class="cl" alt="">
   <h1>Поговорим<em>?</em></h1>
   <div class="contact__lines">
-    <b>Роберт Усманов</b> · Руководитель проекта<br/>
+    <b>Роберт Усманов</b> · Генеральный директор<br/>
     +7 (987) 210-32-82 · r.usmanov@zbsk.ru<br/>
     <span style="color: var(--t1); font-size: 18px;">vezdekakdoma.ru</span>
   </div>
