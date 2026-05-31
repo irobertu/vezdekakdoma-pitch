@@ -1698,16 +1698,70 @@
 
   /* ═══ MOBILE-FIRST RESPONSIVE (≤ 900px) ═══ */
   @media (max-width: 900px) {
+    /* ─── УНИВЕРСАЛЬНЫЙ FORCE-STACK всех grid внутри слайдов ─── */
+    .slide [class*="grid"],
+    .slide [class*="-list"],
+    .slide [class*="-cols"],
+    .slide [class*="-stack"],
+    .why-list, .why-grid, .market-grid, .ue-grid, .team-grid, .ask-grid,
+    .bm-cols, .solution, .traction-grid, .metrics-grid, .pain-grid,
+    .problem-grid, .feat-stack, .rm-footer, .ask-grid,
+    .slide > div[style*="grid-template-columns"],
+    .slide > div[style*="display: grid"] {
+      display: flex !important;
+      flex-direction: column !important;
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+    }
+    .funnel-bars, .bm-stack, .kpi-stack, .market-side, .contact__lines {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+    /* Сохранить горизонтальные группы где надо */
+    .cover__head, .store-row, .nav__brand, .nav__dots, .why-card__head,
+    .phone-cities, .phone-field, .phone-nav, .phone-card,
+    .fb, .feat, .person, .kpi {
+      display: flex !important;
+      flex-direction: row !important;
+    }
+    .phone-cities { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+    .cover__metrics { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+
     body { font-size: 16px; }
     .nav {
-      padding: 12px 16px;
-      flex-wrap: wrap;
-      gap: 10px;
+      padding: 10px 14px !important;
+      gap: 8px !important;
+      flex-wrap: nowrap !important;
+      min-height: auto !important;
+      border-radius: 0 !important;
+      max-width: 100% !important;
+      background: rgba(10,34,48,.96) !important;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 rgba(98,164,172,.18);
     }
-    .nav__brand { font-size: 13px; gap: 8px; }
-    .nav__brand img { height: 24px; }
-    .nav__dots { flex-wrap: wrap; gap: 4px; justify-content: flex-start; }
-    .nav__dot { width: 26px; height: 26px; font-size: 11px; }
+    .nav__brand {
+      font-size: 12px !important;
+      gap: 7px !important;
+      flex-shrink: 0;
+      color: var(--white);
+    }
+    .nav__brand img { height: 20px !important; }
+    .nav__dots {
+      flex-wrap: nowrap !important;
+      gap: 3px !important;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex: 1;
+      justify-content: flex-end;
+    }
+    .nav__dots::-webkit-scrollbar { display: none; }
+    .nav__dot {
+      width: 22px !important; height: 22px !important;
+      font-size: 10px !important;
+      flex-shrink: 0;
+    }
 
     .deck { padding: 0 12px; }
     .slide {
