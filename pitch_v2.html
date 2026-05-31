@@ -1965,7 +1965,7 @@
       height: 22px !important;
     }
     .phone-content {
-      padding: 14px 12px 0 !important;
+      padding: 14px 12px 18px !important;
       gap: 10px !important;
       overflow: hidden !important;
     }
@@ -2436,20 +2436,10 @@
     /* PHONE-NAV (s4 bottom bar) — внутри телефона, иконки крупнее, равномерно */
     .phone-mock { overflow: visible !important; }
     .phone-screen { overflow: hidden !important; }
-    .phone-nav {
-      display: grid !important;
-      grid-template-columns: repeat(5, 1fr) !important;
-      gap: 0 !important;
-      padding: 8px 4px 10px !important;
-      margin: auto -12px 0 !important;
-      border-radius: 14px 14px 0 0 !important;
-      box-sizing: border-box !important;
-    }
-    .phone-nav__i {
-      font-size: 15px !important;
-      gap: 2px !important;
-    }
-    .phone-nav__i small { font-size: 7.5px !important; font-weight: 600 !important; }
+    /* На мобе скрываем bottom-nav — карточки городов выходят на финал */
+    .phone-nav { display: none !important; }
+    /* Города получают больше пространства снизу + bottom padding в .phone-content */
+    .phone-cities { margin-bottom: 6px !important; }
   }
 
   /* ═══ EXTRA-SMALL PHONES (≤ 380px) ═══ */
