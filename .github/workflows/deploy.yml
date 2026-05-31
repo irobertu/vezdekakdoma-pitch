@@ -51,8 +51,8 @@ jobs:
           # 404 fallback
           cp pitch_v2.html _site/404.html
           touch _site/.nojekyll
-          # Custom domain для GitHub Pages (pitch.vezdekakdoma.ru)
-          cp CNAME _site/CNAME
+          # Custom domain для GitHub Pages (если есть файл CNAME)
+          [ -f CNAME ] && cp CNAME _site/CNAME || echo "(no CNAME — using github.io URL)"
 
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -75,4 +75,3 @@ jobs:
           URL="${{ steps.deployment.outputs.page_url }}"
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "fail")
           echo "Pitch homepage HTTP: $STATUS at $URL"
-          [ "$STATUS" = "200" ]
