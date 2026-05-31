@@ -1985,6 +1985,128 @@
 
   }
 
+  /* ═══ MOBILE PATCH-2: критичные фиксы конкретных компонентов ═══ */
+  @media (max-width: 900px) {
+    /* Slide: pad-top больше, чтобы nav не перекрывал eyebrow */
+    .slide { padding-top: 70px !important; overflow: hidden !important; }
+    .slide-logo { top: 70px !important; height: 22px !important; }
+    .eyebrow {
+      display: inline-block !important;
+      position: relative !important;
+      max-width: calc(100% - 38px) !important;
+      margin-left: 30px !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+    }
+
+    /* PROBLEM (s3) — таблица prob-table → карточки */
+    .prob-table { padding: 12px !important; }
+    .prob-row {
+      display: flex !important;
+      flex-direction: column !important;
+      grid-template-columns: none !important;
+      gap: 6px !important;
+      padding: 14px 12px !important;
+      align-items: flex-start !important;
+      font-size: 13px !important;
+    }
+    .prob-row.head { display: none !important; }
+    .prob-row > div:first-child {
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      color: var(--t1) !important;
+    }
+    .prob-row > div:nth-child(3) {
+      font-weight: 600 !important;
+      color: #FFB48A !important;
+      font-size: 13px !important;
+    }
+    /* Pain-chip («3,5 млн ...») — не вылезает */
+    [class*="pain-chip"], [class*="big-stat"], .lead, .pain-pill {
+      max-width: 100% !important;
+      box-sizing: border-box;
+    }
+
+    /* SOLUTION (s4) — phone-field stack */
+    .phone-field {
+      grid-template-columns: 1fr !important;
+      display: flex !important; flex-direction: column !important;
+      gap: 2px !important;
+      align-items: flex-start !important;
+      padding: 9px 12px !important;
+    }
+    .phone-field__l { font-size: 10px !important; color: var(--navy) !important; }
+    .phone-field__v { font-size: 11px !important; color: var(--t3) !important; opacity: .8 !important; }
+    .phone-field__c { display: none !important; }
+    /* store-row: stack на узком экране */
+    .store-row {
+      flex-direction: column !important;
+      gap: 10px !important;
+      width: 100% !important;
+    }
+    .store-badge { width: 100% !important; justify-content: center !important; }
+
+    /* TRACTION (s5) — bento главный сигнал «0 ₽» нужно сжать */
+    .bento {
+      display: flex !important;
+      flex-direction: column !important;
+      grid-template-columns: none !important;
+      gap: 12px !important;
+    }
+    .bento__hero {
+      grid-column: auto !important;
+      grid-row: auto !important;
+      min-height: auto !important;
+      padding: 22px 20px !important;
+    }
+    .bento__hero-big {
+      font-size: 64px !important;
+      margin: 12px 0 8px !important;
+      letter-spacing: -.03em !important;
+    }
+    .bento__hero-cap { font-size: 13px !important; line-height: 1.45 !important; }
+    .bento__hero-tag { font-size: 10px !important; padding: 5px 11px !important; letter-spacing: 1.8px !important; }
+    .bento__hero-foot { font-size: 11px !important; }
+
+    /* TEAM (s11) — person card stack */
+    .person {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 10px !important;
+      padding: 16px !important;
+      text-align: left !important;
+    }
+    .person__avatar {
+      width: 44px !important; height: 44px !important;
+      font-size: 13px !important;
+      margin-bottom: 4px !important;
+      flex-shrink: 0;
+    }
+    .person__name { font-size: 14px !important; line-height: 1.2 !important; }
+    .person__role {
+      font-size: 11px !important;
+      letter-spacing: 1px !important;
+      margin-top: 2px !important;
+      text-transform: uppercase;
+    }
+    .person__bio { font-size: 12px !important; line-height: 1.45 !important; margin-top: 6px !important; }
+
+    /* TABLES (общее) — горизонтальный скролл */
+    .bm-mix, .ue-grid > div:has(table) {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+    table.t { min-width: 480px; }
+    .ask-table { min-width: 360px; }
+
+    /* COVER — illustration сначала уменьшить */
+    .cover__illust { min-height: 200px !important; max-height: 240px !important; }
+    .cover__globe { width: 200px !important; height: 200px !important; }
+    .cover__illust img { max-height: 200px !important; }
+    .cover__metric b { font-size: 22px !important; }
+  }
+
   /* ═══ EXTRA-SMALL PHONES (≤ 380px) ═══ */
   @media (max-width: 380px) {
     .title { font-size: 24px !important; }
