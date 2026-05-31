@@ -51,6 +51,8 @@ jobs:
           # 404 fallback
           cp pitch_v2.html _site/404.html
           touch _site/.nojekyll
+          # Custom domain для GitHub Pages (pitch.vezdekakdoma.ru)
+          cp CNAME _site/CNAME
 
       - uses: actions/upload-pages-artifact@v3
         with:
