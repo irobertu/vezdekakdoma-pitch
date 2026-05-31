@@ -1,124 +1,82 @@
 # DEPLOY · pitch.vezdekakdoma.ru
 
-Финальная ссылка для инвесторов: **https://pitch.vezdekakdoma.ru/**
+## Статус
 
-## Что нужно сделать (один раз)
+| Шаг | Статус |
+|---|---|
+| GitHub репо `irobertu/vezdekakdoma-pitch` (private) | ✅ создан |
+| GitHub Secrets (`VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`) | ✅ установлены |
+| Файлы залиты на VPS `/var/www/pitch-vkd/` (1.85 МБ) | ✅ через GH Actions |
+| nginx server-block для `pitch.vezdekakdoma.ru:80` | ✅ установлен |
+| Проверка: HTTP 200 при curl с Host header | ✅ |
+| **DNS A-запись `pitch.vezdekakdoma.ru → 92.51.39.180`** | ⏳ **осталось сделать вручную** |
+| SSL via certbot (требует DNS) | ⏳ после DNS |
 
-### 1. DNS — добавь A-запись (5 мин)
-Зайди в **панель TimeWeb → Домены → vezdekakdoma.ru → DNS** и добавь:
+## Один оставшийся шаг — DNS
+
+Зайти в **TimeWeb → Домены → vezdekakdoma.ru → DNS-записи** и добавить:
 
 | Тип | Имя | Значение | TTL |
 |---|---|---|---|
-| A | `pitch` | `92.51.39.180` *(IP твоего VPS)* | 600 |
+| `A` | `pitch` | `92.51.39.180` | 600 |
 
-Проверь через 5–15 минут:
+Проверить через 5–15 минут:
 ```bash
-dig pitch.vezdekakdoma.ru +short
+dig +short pitch.vezdekakdoma.ru @8.8.8.8
 # должно вернуть 92.51.39.180
 ```
 
-### 2. Создай репо на GitHub (3 мин)
+## После того как DNS заработал
+
+Одна команда — она поставит SSL и переключит сайт на HTTPS:
+
+```bash
+gh workflow run setup-vps.yml -f run_certbot=true --repo irobertu/vezdekakdoma-pitch
+```
+
+Через 1–2 минуты сайт доступен по **https://pitch.vezdekakdoma.ru/**
+
+## Обновления деки
+
+Каждая правка → `git push` → GitHub Actions автоматически задеплоит на VPS:
 
 ```bash
 cd ~/Downloads/vezde_kak_doma_pitch_v2
-git init
-git add .
-git commit -m "Initial pitch v2 — Везде как дома"
-gh repo create irobertu/vezdekakdoma-pitch --private --source=. --remote=origin --push
-```
-
-### 3. Добавь GitHub Secrets (3 мин)
-
-В репо **Settings → Secrets and variables → Actions → New repository secret**:
-
-| Secret | Значение |
-|---|---|
-| `VPS_HOST` | `92.51.39.180` |
-| `VPS_USER` | `root` |
-| `VPS_SSH_KEY` | Приватный SSH-ключ (тот же что для rassylka/moyamolodost деплоя) |
-| `YM_COUNTER_ID` | (опционально) Counter ID Яндекс.Метрики — например `12345678` |
-
-> Если `YM_COUNTER_ID` не задан — Метрика просто не вставится, deck работает без неё.
-
-### 4. Настрой VPS (10 мин)
-
-Через GH Actions нельзя выполнить **первоначальную** настройку nginx + SSL. Это разовая операция через TimeWeb web-SSH (твой обычный SSH забанен):
-
-```bash
-# скопируй setup-vps.sh и deploy/nginx.conf на VPS
-scp deploy/setup-vps.sh root@92.51.39.180:/tmp/  # либо через TimeWeb web-shell
-scp deploy/nginx.conf root@92.51.39.180:/tmp/
-
-# на VPS:
-bash /tmp/setup-vps.sh           # создаёт webroot, временный nginx, certbot SSL
-cp /tmp/nginx.conf /etc/nginx/sites-available/pitch.vezdekakdoma.ru
-nginx -t && systemctl reload nginx
-```
-
-После этого VPS готов принимать деплои.
-
-### 5. Получи Яндекс.Метрику counter (опционально, 5 мин)
-
-1. https://metrika.yandex.ru → создать счётчик
-2. Domain: `pitch.vezdekakdoma.ru`
-3. Включить Webvisor 2.0 + Карта кликов
-4. Скопировать **counter ID** (например `98765432`)
-5. Положить в GH Secret `YM_COUNTER_ID`
-
-## После настройки — каждый деплой
-
-```bash
-cd ~/Downloads/vezde_kak_doma_pitch_v2
-# вношу правки в pitch_v2.html
 git add pitch_v2.html
-git commit -m "правка: что изменилось"
+git commit -m "что изменилось"
 git push
-# GH Actions автоматически задеплоит за ~30 сек
 ```
 
-Ссылка на статус деплоев: `https://github.com/irobertu/vezdekakdoma-pitch/actions`
+Статус деплоя: https://github.com/irobertu/vezdekakdoma-pitch/actions
 
-## OG-превью для соцсетей
+## Опционально
 
-Сейчас в `assets/og/cover.png` лежит заглушка (illust-1.png). Чтобы сделать красивое превью для Telegram/WhatsApp/email:
+### Яндекс.Метрика
+1. https://metrika.yandex.ru → создать счётчик `pitch.vezdekakdoma.ru` + Webvisor 2.0
+2. Скопировать counter ID
+3. `gh secret set YM_COUNTER_ID --body "12345678" --repo irobertu/vezdekakdoma-pitch`
+4. Следующий push автоматически встроит код Метрики
 
-1. Открой pitch в Chrome
-2. DevTools → Device Toolbar (Cmd+Shift+M) → задай размер **1200×630**
-3. Сделай скриншот s1 (Cover)
-4. Сохрани в `assets/og/cover.png`
-5. `git add assets/og/cover.png && git commit -m "OG preview" && git push`
+### OG-превью для соцсетей
+Сейчас в `assets/og/cover.png` лежит заглушка из иллюстрации. Чтобы сделать красивое превью для Telegram/WhatsApp:
+1. Открыть `pitch_v2.html` в Chrome, выставить размер окна `1200×630`
+2. Сделать screenshot первого слайда (Cover)
+3. Сохранить как `assets/og/cover.png`
+4. `git add assets/og/cover.png && git commit -m "OG preview" && git push`
 
-Проверь как выглядит ссылка:
-- Telegram: https://t.me/iv?url=https://pitch.vezdekakdoma.ru/
-- Facebook: https://developers.facebook.com/tools/debug/
-
-## Файлы
+## Что под капотом
 
 ```
-~/Downloads/vezde_kak_doma_pitch_v2/
-├── pitch_v2.html             ← главный файл, в деплое = index.html
-├── 04_FINANCIALS_SOURCES.md  ← обоснование цифр (НЕ деплоится, для тебя)
-├── assets/
-│   ├── fonts/, logo/, icons/, illustrations/, cities/
-│   └── og/cover.png          ← превью для shared link
-├── .github/workflows/
-│   └── deploy.yml            ← автодеплой на push в main
-└── deploy/
-    ├── nginx.conf            ← конфиг для /etc/nginx/sites-available/
-    └── setup-vps.sh          ← разовая инициализация VPS
+pitch_v2.html                         ← главный файл, при деплое = index.html
+assets/                               ← шрифты, лого, иконки, иллюстрации, города
+.github/workflows/deploy.yml          ← авто-деплой на push в main
+.github/workflows/setup-vps.yml       ← разовая настройка nginx + SSL
+deploy/nginx.conf                     ← финальный nginx config с SSL
+deploy/setup-vps.sh                   ← legacy bash-скрипт (не нужен, всё через GH Actions)
+04_FINANCIALS_SOURCES.md              ← обоснование цифр (НЕ деплоится)
 ```
 
-## Откат / правки
+## Откат
 
-- Любая правка в `pitch_v2.html` → `git push` → автодеплой
-- Откат на предыдущую версию: `git revert HEAD && git push`
-- Полный rollback: `git reset --hard <commit-sha> && git push -f` (осторожно)
-- Если что-то сломалось в nginx — откат конфига вручную через TimeWeb web-shell
-
-## Мобильная версия
-
-Полностью адаптирована под iPhone (≤900px и ≤380px breakpoints). Тестируется в DevTools → Device Mode (Cmd+Shift+M) на iPhone 13/14 (390px).
-
-## PDF-экспорт
-
-Кнопка «Скачать PDF» в правом нижнем углу деки → открывает Chrome print dialog → «Сохранить как PDF». Печатные стили оптимизированы (без nav, без shadow, каждый слайд = страница A4).
+- Откат коммита: `git revert HEAD && git push`
+- Полный rollback: `git reset --hard <sha> && git push -f`
