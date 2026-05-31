@@ -1988,13 +1988,14 @@
   /* ═══ MOBILE PATCH-2: критичные фиксы конкретных компонентов ═══ */
   @media (max-width: 900px) {
     /* Slide: pad-top больше, чтобы nav не перекрывал eyebrow */
-    .slide { padding-top: 70px !important; overflow: hidden !important; }
-    .slide-logo { top: 70px !important; height: 22px !important; }
+    .slide { padding-top: 28px !important; overflow: hidden !important; }
+    .slide-logo { display: none !important; }
     .eyebrow {
       display: inline-block !important;
       position: relative !important;
-      max-width: calc(100% - 38px) !important;
-      margin-left: 30px !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-bottom: 14px !important;
       white-space: normal !important;
       word-break: break-word !important;
     }
@@ -2012,20 +2013,57 @@
     }
     .prob-row.head { display: none !important; }
     .prob-row > div:first-child {
-      font-size: 14px !important;
+      font-size: 15px !important;
       font-weight: 700 !important;
       color: var(--t1) !important;
+      margin-bottom: 2px;
+    }
+    .prob-row > div:nth-child(2) {
+      font-size: 13px !important;
+      color: rgba(253,255,255,.78) !important;
+      line-height: 1.45 !important;
     }
     .prob-row > div:nth-child(3) {
+      display: block !important;
+      background: rgba(255,150,100,.10) !important;
+      border-left: 2px solid #FFB48A !important;
+      padding: 8px 12px !important;
+      border-radius: 6px !important;
       font-weight: 600 !important;
       color: #FFB48A !important;
       font-size: 13px !important;
+      margin-top: 6px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .prob-row > div:nth-child(3)::before {
+      content: 'Цена провала: ';
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,180,138,.6);
+      font-weight: 600;
+      margin-bottom: 3px;
     }
     /* Pain-chip («3,5 млн ...») — не вылезает */
     [class*="pain-chip"], [class*="big-stat"], .lead, .pain-pill {
       max-width: 100% !important;
       box-sizing: border-box;
     }
+    /* hero-pill (s3 «3,5 млн ...») — flex column, текст переносится */
+    .hero-pill {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 6px !important;
+      padding: 16px 18px !important;
+      border-radius: 18px !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .hero-pill b { white-space: normal !important; font-size: 32px !important; }
+    .hero-pill span { white-space: normal !important; font-size: 12.5px !important; line-height: 1.4 !important; }
 
     /* SOLUTION (s4) — phone-field stack */
     .phone-field {
@@ -2100,11 +2138,42 @@
     table.t { min-width: 480px; }
     .ask-table { min-width: 360px; }
 
-    /* COVER — illustration сначала уменьшить */
-    .cover__illust { min-height: 200px !important; max-height: 240px !important; }
-    .cover__globe { width: 200px !important; height: 200px !important; }
-    .cover__illust img { max-height: 200px !important; }
+    /* COVER — иллюстрация ВКЛЮЧАЯ globe-blob скрыта на мобильной */
+    .cover__illust, .cover__globe { display: none !important; }
     .cover__metric b { font-size: 22px !important; }
+    .cover__body { grid-template-columns: 1fr !important; }
+
+    /* ROADMAP (s10) — кружочки крупнее */
+    .rm-dot {
+      width: 78px !important; height: 78px !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      line-height: 1.2 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+    }
+    .rm-pt {
+      padding: 14px 16px !important;
+      gap: 16px !important;
+    }
+    .rm-lab { font-size: 14px !important; font-weight: 600 !important; }
+    .rm-arr { font-size: 12.5px !important; font-weight: 600 !important; color: var(--t1) !important; }
+
+    /* PHONE-NAV (s4 bottom bar) — иконки крупнее и равномерно */
+    .phone-nav {
+      display: grid !important;
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 0 !important;
+      padding: 6px 4px !important;
+    }
+    .phone-nav__i {
+      font-size: 18px !important;
+      gap: 3px !important;
+      width: 100% !important;
+    }
+    .phone-nav__i small { font-size: 8px !important; font-weight: 600 !important; }
   }
 
   /* ═══ EXTRA-SMALL PHONES (≤ 380px) ═══ */
