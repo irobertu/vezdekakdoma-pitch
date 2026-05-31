@@ -2355,21 +2355,58 @@
     .rm-lab { font-size: 14px !important; font-weight: 600 !important; }
     .rm-arr { font-size: 12.5px !important; font-weight: 600 !important; color: var(--t1) !important; }
 
-    /* TRACTION (s5) — bars chart должен быть виден */
-    .bento__chart { min-height: 240px !important; padding: 18px !important; }
-    .bento__chart-head { gap: 8px !important; margin-bottom: 14px !important; }
-    .bento__chart-head h4 { font-size: 14px !important; }
-    .bento__chart-head span { font-size: 11px !important; }
-    .bars {
-      flex: 1 !important;
-      min-height: 160px !important;
-      gap: 3px !important;
-      padding-bottom: 22px !important;
+    /* TRACTION (s5) — bars chart жирнее на мобе */
+    .bento__chart {
+      min-height: 320px !important;
+      padding: 20px 18px !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
-    .bar { min-width: 8px !important; }
-    .bar__lab { font-size: 8px !important; }
-    .mom-pill { font-size: 11px !important; padding: 5px 11px !important; white-space: nowrap !important; }
-    .chart-axis { font-size: 10px !important; }
+    .bento__chart-head {
+      gap: 8px !important;
+      margin-bottom: 18px !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      justify-content: space-between !important;
+    }
+    .bento__chart-head > div:first-child { flex: 1 !important; min-width: 0 !important; }
+    .bento__chart-head h4 { font-size: 15px !important; color: var(--mint) !important; }
+    .bento__chart-head span { font-size: 11px !important; display: block !important; margin-top: 2px !important; }
+    .bars {
+      display: flex !important;
+      align-items: flex-end !important;
+      flex: 1 !important;
+      min-height: 220px !important;
+      gap: 4px !important;
+      padding-bottom: 24px !important;
+      position: relative !important;
+    }
+    .bar {
+      flex: 1 !important;
+      min-width: 10px !important;
+      background: linear-gradient(to top, var(--t3), var(--t1)) !important;
+      border-radius: 3px 3px 0 0 !important;
+    }
+    .bar--latest {
+      background: linear-gradient(to top, var(--t1), #9DD2D6) !important;
+      box-shadow: 0 -2px 10px rgba(157,210,214,.45) !important;
+    }
+    .bar__lab {
+      font-size: 8.5px !important;
+      bottom: -18px !important;
+    }
+    .mom-pill {
+      font-size: 11px !important;
+      padding: 5px 10px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+    .chart-axis {
+      font-size: 10px !important;
+      margin-top: 6px !important;
+      gap: 8px !important;
+    }
+    .chart-axis span { line-height: 1.3 !important; }
 
     /* PHONE-NAV (s4 bottom bar) — внутри телефона, иконки крупнее, равномерно */
     .phone-mock { overflow: visible !important; }
